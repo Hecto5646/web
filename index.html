@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I Clean Bottom - Táctico</title>
-
+    <title>I Clean Bottom - Táctico con Tienda</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -17,76 +16,53 @@
             background-color: #fdfaf7;
             font-family: 'Quicksand', sans-serif;
         }
-
         .custom-scrollbar::-webkit-scrollbar {
             width: 4px;
         }
-
         .custom-scrollbar::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
-
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #d4b8a3;
             border-radius: 4px;
         }
-
-        .brown-accent {
-            color: #5d4037;
-        }
-
-        .bg-brown-accent {
-            background-color: #5d4037;
-        }
-
-        .border-brown-accent {
-            border-color: #5d4037;
-        }
-
+        .brown-accent { color: #5d4037; }
+        .bg-brown-accent { background-color: #5d4037; }
+        .border-brown-accent { border-color: #5d4037; }
+        
         @keyframes liquid-flow {
-            0% {
-                border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
-            }
-
-            50% {
-                border-radius: 60% 40% 40% 60% / 60% 60% 40% 40%;
-            }
-
-            100% {
-                border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
-            }
+            0% { border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%; }
+            50% { border-radius: 60% 40% 40% 60% / 60% 60% 40% 40%; }
+            100% { border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%; }
         }
-
         .liquid-shape {
             animation: liquid-flow 6s ease-in-out infinite;
         }
-
-        .glass-card {
-            background: rgba(255, 249, 249, 0.8);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(93, 64, 55, 0.1);
+        
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(300%); }
+        }
+        .animate-loading {
+            animation: loading 2s linear infinite;
         }
 
-        .toggle-dot {
-            transition: transform 0.3s ease;
-        }
-
-        .active-toggle .toggle-dot {
-            transform: translateX(100%);
+        .product-card:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
-
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Imágenes de Google Drive
+        // Imágenes configuradas
         const LOGO_IMG = "https://lh3.googleusercontent.com/d/1ygEsRR5wfcnLCWvC0-EVG5IpDzg6BkrD";
         const USER_PHOTO = "https://lh3.googleusercontent.com/d/13mvPeQLVncpaj6QTejGKSAbySFDkGItp";
 
+        // Componentes de Iconos
         const Icon = ({ path, className, fill = "none" }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
                 {path}
@@ -99,11 +75,16 @@
         const Sparkles = (props) => <Icon {...props} path={<path d="m12 3 1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3Z" />} />;
         const Truck = (props) => <Icon {...props} path={<><rect width="16" height="13" x="1" y="5" rx="2" /><polygon points="16 5 22 10 22 18 16 18 16 5" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></>} />;
         const Check = (props) => <Icon {...props} path={<polyline points="20 6 9 17 4 12" />} />;
+        const ShoppingBag = (props) => <Icon {...props} path={<><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></>} />;
 
         function App() {
             const [activeTab, setActiveTab] = useState('home');
-            const [status, setStatus] = useState('idle'); // idle, dispatching, arrived
+            const [status, setStatus] = useState('idle');
             const [pressureLevel, setPressureLevel] = useState(98);
+            const [points, setPoints] = useState(6532);
+            const [missionsCount, setMissionsCount] = useState(42);
+            const [message, setMessage] = useState("");
+
             const [arsenal, setArsenal] = useState({
                 oro: false,
                 incognito: true,
@@ -112,45 +93,118 @@
                 lija: false
             });
 
+            // PRODUCTOS ACTUALIZADOS
+            // AQUÍ ES DONDE CAMBIAS LAS URLS EN EL CAMPO "img"
+            const shopProducts = [
+                { 
+                    id: 1, 
+                    title: "iClean Wipes", 
+                    price: 250, 
+                    desc: "Con Aloe Vera y Vitamina E", 
+                    img: "https://lh3.googleusercontent.com/d/1qU4JpEht0y9a58xDHamObdvzRfLrsFb4" // PON TU URL AQUÍ
+                },
+                { 
+                    id: 2, 
+                    title: "Pack Premium", 
+                    price: 450, 
+                    desc: "Papel ecológico texturizado", 
+                    img: "https://lh3.googleusercontent.com/d/1SkP5qfL5Ie1uM73gc04PV3x9vRhkSUKx" // PON TU URL AQUÍ
+                },
+                { 
+                    id: 3, 
+                    title: "iBrush", 
+                    price: 120, 
+                    desc: "Diseño ergonómico mate", 
+                    img: "https://lh3.googleusercontent.com/d/1mGYF91zQVGgN28Qzk_FMh-octq17l1yb" // PON TU URL AQUÍ
+                },
+                { 
+                    id: 4, 
+                    title: "Underwear", 
+                    price: 180, 
+                    desc: "Algodón orgánico confortable", 
+                    img: "https://lh3.googleusercontent.com/d/1n0R8TnxIeO9PbT3-jH9bICY6d1o9WPUf" // PON TU URL AQUÍ
+                },
+                { 
+                    id: 5, 
+                    title: "iBurning", 
+                    price: 300, 
+                    desc: "Por si te escueze el ano", 
+                    img: "https://lh3.googleusercontent.com/d/1hGKCdJ8zwtNCWwChrKzxJlTTkUlSxdlb" // PON TU URL AQUÍ
+                },
+                { 
+                    id: 6, 
+                    title: "Supositorios y Lavativas", 
+                    price: 300, 
+                    desc: "Introducidas automaticamente por su te cuesta defecar", 
+                    img: "https://lh3.googleusercontent.com/d/1aljNRVGr2tRFYiZOghAugCH_TtAqPGtF" // PON TU URL AQUÍ
+                }
+            ];
+
             const toggleArsenal = (key) => {
                 setArsenal(prev => ({ ...prev, [key]: !prev[key] }));
             };
 
             const requestService = () => {
                 setStatus('dispatching');
-                setTimeout(() => setStatus('arrived'), 3000);
+                setTimeout(() => setStatus('arrived'), 2500);
             };
 
             const finalize = () => {
                 setStatus('idle');
                 setPressureLevel(0);
+                setPoints(prev => prev + 10);
+                setMissionsCount(prev => prev + 1);
+                showNotification("¡Misión cumplida! +10 puntos");
+            };
+
+            const buyProduct = (product) => {
+                if (points >= product.price) {
+                    setPoints(prev => prev - product.price);
+                    showNotification(`Compraste: ${product.title}`);
+                } else {
+                    showNotification("Puntos insuficientes");
+                }
+            };
+
+            const showNotification = (text) => {
+                setMessage(text);
+                setTimeout(() => setMessage(""), 3000);
             };
 
             return (
                 <div className="min-h-screen w-full flex items-center justify-center p-4">
                     <div className="relative w-[375px] h-[812px] bg-white rounded-[3.5rem] shadow-2xl overflow-hidden border-[8px] border-brown-accent flex flex-col">
-
-                        {/* Dynamic Island */}
+                        
                         <div className="absolute top-0 left-0 w-full h-10 flex justify-center items-end pb-1 z-50">
                             <div className="w-24 h-5 bg-brown-accent rounded-full"></div>
                         </div>
 
-                        {/* Cabecera Corregida */}
+                        {message && (
+                            <div className="absolute top-16 left-1/2 -translate-x-1/2 z-50 bg-brown-accent text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg animate-bounce text-center min-w-[200px]">
+                                {message}
+                            </div>
+                        )}
+
                         <header className="pt-12 px-6 pb-4 flex justify-between items-center bg-white border-b border-orange-100">
                             <div className="flex items-center gap-2">
                                 <span className="font-bold text-brown-accent tracking-tighter text-xl italic uppercase">I CLEAN BOTTOM</span>
                                 <img src={LOGO_IMG} alt="Logo" className="w-8 h-8 object-contain" />
                             </div>
-                            <div className="w-10 h-10 rounded-full border-2 border-brown-accent p-0.5">
-                                <img src={USER_PHOTO} alt="Perfil" className="w-full h-full rounded-full object-cover" />
+                            <div className="flex items-center gap-3">
+                                <div className="text-right">
+                                    <p className="text-[10px] font-bold brown-accent/40 uppercase leading-none">Puntos</p>
+                                    <p className="text-sm font-black brown-accent leading-none">{points}</p>
+                                </div>
+                                <div className="w-10 h-10 rounded-full border-2 border-brown-accent p-0.5">
+                                    <img src={USER_PHOTO} alt="Perfil" className="w-full h-full rounded-full object-cover" />
+                                </div>
                             </div>
                         </header>
 
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
-
+                            
                             {activeTab === 'home' && (
                                 <div className="space-y-8 animate-in fade-in duration-500">
-                                    {/* BIO-ANALIZADOR */}
                                     <div className="relative h-64 flex flex-col items-center justify-center">
                                         <div className="absolute inset-0 flex items-center justify-center">
                                             <div className="w-48 h-48 bg-orange-50 liquid-shape flex items-center justify-center border-2 border-brown-accent/20">
@@ -160,69 +214,86 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="absolute top-0 right-10 w-2 h-2 bg-brown-accent rounded-full animate-ping"></div>
-                                        <div className="absolute bottom-10 left-5 w-3 h-3 bg-brown-accent/40 rounded-full animate-bounce"></div>
                                     </div>
 
                                     <div className="text-center space-y-4">
                                         <div className="space-y-1">
-                                            <h2 className="text-sm font-bold brown-accent uppercase tracking-widest opacity-60">Alerta de Presión</h2>
-                                            <h1 className="text-2xl font-bold text-brown-accent leading-tight italic">¿Sientes la llamada?</h1>
+                                            <h2 className="text-sm font-bold brown-accent uppercase tracking-widest opacity-60">Analizador Táctico</h2>
+                                            <h1 className="text-2xl font-bold text-brown-accent leading-tight italic">¿Estado de Emergencia?</h1>
                                         </div>
 
                                         {status === 'idle' && (
-                                            <button
+                                            <button 
                                                 onClick={requestService}
                                                 className="w-full py-8 bg-brown-accent rounded-[2rem] shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all group"
                                             >
                                                 <span className="text-white font-bold text-lg italic uppercase tracking-tighter">
-                                                    Tengo ganas de defecar o miccionar
+                                                    Desplegar Trono 3000
                                                 </span>
                                             </button>
                                         )}
 
                                         {status === 'dispatching' && (
                                             <div className="p-8 bg-orange-50 rounded-[2.5rem] border-2 border-dashed border-brown-accent/30 space-y-4">
-                                                <div className="flex justify-center">
-                                                    <Truck className="w-14 h-14 brown-accent animate-pulse" />
-                                                </div>
-                                                <h3 className="text-xl font-bold brown-accent italic uppercase">Tu icleanpet 3000 está en camino</h3>
+                                                <Truck className="w-12 h-12 brown-accent animate-pulse mx-auto" />
+                                                <h3 className="text-lg font-bold brown-accent italic uppercase">En camino...</h3>
                                                 <div className="w-full bg-stone-200 h-1.5 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-brown-accent animate-[loading_3s_linear_infinite]" style={{ width: '30%' }}></div>
+                                                    <div className="h-full bg-brown-accent animate-loading" style={{width: '30%'}}></div>
                                                 </div>
                                             </div>
                                         )}
 
                                         {status === 'arrived' && (
                                             <div className="space-y-4">
-                                                <div className="p-8 bg-green-50 rounded-[2.5rem] border-2 border-green-200 space-y-2">
-                                                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
-                                                        <Check className="text-white w-8 h-8" />
-                                                    </div>
-                                                    <h3 className="text-xl font-bold text-green-700 italic uppercase">¡Trono Desplegado!</h3>
-                                                    <p className="text-xs text-green-600 font-bold uppercase">Misión en curso...</p>
+                                                <div className="p-8 bg-green-50 rounded-[2.5rem] border-2 border-green-200">
+                                                    <Check className="text-green-500 w-10 h-10 mx-auto mb-2" />
+                                                    <h3 className="text-xl font-bold text-green-700 italic uppercase">¡Listo para la acción!</h3>
                                                 </div>
-                                                <button
+                                                <button 
                                                     onClick={finalize}
                                                     className="w-full py-6 bg-stone-900 rounded-[2rem] shadow-xl flex flex-col items-center justify-center hover:bg-black transition-colors"
                                                 >
-                                                    <span className="text-white font-bold text-lg italic uppercase">Finalizar Operación</span>
-                                                    <span className="text-orange-300 text-[10px] font-black uppercase tracking-widest mt-1">Activar Autolimpieza</span>
+                                                    <span className="text-white font-bold text-lg italic uppercase">Finalizar y Cobrar +10 pts</span>
                                                 </button>
                                             </div>
                                         )}
-
+                                        
                                         <p className="text-[10px] text-brown-accent/40 font-medium px-10">
-                                            ICleanBottom: Servicio de despliegue inmediato para emergencias fisiológicas críticas.
+                                            Mantén la higiene bajo control. Cada uso te otorga recompensas.
                                         </p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeTab === 'shop' && (
+                                <div className="space-y-6 animate-in slide-in-from-bottom-4">
+                                    <h2 className="text-xl font-bold text-brown-accent italic uppercase">Tienda Táctica</h2>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        {shopProducts.map(product => (
+                                            <div key={product.id} className="bg-white p-4 rounded-3xl flex items-center gap-4 border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                                                <img src={product.img} className="w-20 h-20 rounded-2xl object-cover bg-stone-100" alt={product.title} />
+                                                <div className="flex-1">
+                                                    <h3 className="font-bold text-sm brown-accent uppercase italic leading-none">{product.title}</h3>
+                                                    <p className="text-[10px] text-stone-500 font-medium mt-1">{product.desc}</p>
+                                                    <div className="mt-2 flex items-center justify-between">
+                                                        <span className="text-sm font-black brown-accent">{product.price} pts</span>
+                                                        <button 
+                                                            onClick={() => buyProduct(product)}
+                                                            className="bg-brown-accent text-white px-4 py-1.5 rounded-full text-[10px] font-bold uppercase hover:bg-black transition-colors"
+                                                        >
+                                                            Canjear
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )}
 
                             {activeTab === 'services' && (
                                 <div className="space-y-6 animate-in slide-in-from-bottom-4">
-                                    <h2 className="text-xl font-bold text-brown-accent italic uppercase">Arsenal de Supervivencia</h2>
-
+                                    <h2 className="text-xl font-bold text-brown-accent italic uppercase">Equipamiento Activo</h2>
                                     <div className="grid gap-4">
                                         {[
                                             { id: 'oro', name: "Papel de Oro 24K", desc: "Para una limpieza real", price: "50 pts" },
@@ -233,8 +304,8 @@
                                             { id: 'aloe', name: "Papel Aloe Vera (Relax)", desc: "Para cuando lo tienes irritado", price: "10 pt" },
                                             { id: 'lavativa', name: "Introduccion Lavativa Automatica", desc: "En casos de estreñimiento", price: "20 pt" }
                                         ].map((item) => (
-                                            <div
-                                                key={item.id}
+                                            <div 
+                                                key={item.id} 
                                                 onClick={() => toggleArsenal(item.id)}
                                                 className={`p-5 rounded-2xl flex justify-between items-center cursor-pointer transition-all border ${arsenal[item.id] ? 'bg-brown-accent text-white border-brown-accent' : 'bg-white text-brown-accent border-stone-100 shadow-sm'}`}
                                             >
@@ -242,8 +313,6 @@
                                                     <h4 className="font-bold text-sm uppercase italic">{item.name}</h4>
                                                     <p className={`text-[10px] uppercase font-bold ${arsenal[item.id] ? 'text-white/60' : 'text-stone-400'}`}>{item.desc}</p>
                                                 </div>
-
-                                                {/* Toggle Switch */}
                                                 <div className={`w-10 h-6 rounded-full p-1 flex items-center transition-colors ${arsenal[item.id] ? 'bg-orange-400' : 'bg-stone-200'}`}>
                                                     <div className={`w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform ${arsenal[item.id] ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                                 </div>
@@ -262,31 +331,28 @@
                                         <h2 className="text-2xl font-bold brown-accent italic uppercase">Hecto56</h2>
                                         <div className="mt-2 flex justify-center gap-1">
                                             <Sparkles className="w-4 h-4 text-orange-400" fill="currentColor" />
-                                            <span className="text-xs font-bold brown-accent uppercase tracking-widest">Nivel: Defecador Hardcore</span>
+                                            <span className="text-xs font-bold brown-accent uppercase tracking-widest">Nivel: Master Defecador</span>
                                         </div>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="p-6 bg-white rounded-3xl border border-brown-accent/20 text-center">
-                                            <span className="text-2xl font-bold brown-accent">42</span>
+                                            <span className="text-2xl font-bold brown-accent">{missionsCount}</span>
                                             <p className="text-[8px] font-bold brown-accent/40 uppercase tracking-widest">Misiones</p>
                                         </div>
                                         <div className="p-6 bg-white rounded-3xl border border-brown-accent/20 text-center">
-                                            <span className="text-2xl font-bold brown-accent">9.8</span>
-                                            <p className="text-[8px] font-bold brown-accent/40 uppercase tracking-widest">Limpieza Media</p>
+                                            <span className="text-2xl font-bold brown-accent">{points}</span>
+                                            <p className="text-[8px] font-bold brown-accent/40 uppercase tracking-widest">Puntos Totales</p>
                                         </div>
                                     </div>
 
                                     <div className="p-5 bg-brown-accent text-white rounded-3xl space-y-2">
                                         <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <Sparkles className="w-4 h-4 text-orange-400" />
-                                                <p className="text-xs font-bold italic uppercase">Rango: Zurullo de Oro</p>
-                                            </div>
-                                            <span className="text-[10px] font-black uppercase">Progreso: 95%</span>
+                                            <p className="text-xs font-bold italic uppercase">Rango: Zurullo de Oro</p>
+                                            <span className="text-[10px] font-black uppercase">95%</span>
                                         </div>
                                         <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden">
-                                            <div className="h-full bg-orange-400" style={{ width: '95%' }}></div>
+                                            <div className="h-full bg-orange-400" style={{width: '95%'}}></div>
                                         </div>
                                     </div>
                                 </div>
@@ -294,17 +360,20 @@
 
                         </div>
 
-                        {/* Navegación Inferior */}
                         <nav className="h-20 bg-white border-t border-orange-100 flex justify-around items-center px-4">
-                            <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 ${activeTab === 'home' ? 'brown-accent scale-110' : 'text-stone-300'}`}>
+                            <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 transition-all ${activeTab === 'home' ? 'brown-accent scale-110' : 'text-stone-300'}`}>
                                 <Droplets className="w-6 h-6" fill={activeTab === 'home' ? "currentColor" : "none"} />
                                 <span className="text-[9px] font-bold uppercase tracking-tighter italic">Bio</span>
                             </button>
-                            <button onClick={() => setActiveTab('services')} className={`flex flex-col items-center gap-1 ${activeTab === 'services' ? 'brown-accent scale-110' : 'text-stone-300'}`}>
+                            <button onClick={() => setActiveTab('shop')} className={`flex flex-col items-center gap-1 transition-all ${activeTab === 'shop' ? 'brown-accent scale-110' : 'text-stone-300'}`}>
+                                <ShoppingBag className="w-6 h-6" fill={activeTab === 'shop' ? "currentColor" : "none"} />
+                                <span className="text-[9px] font-bold uppercase tracking-tighter italic">Tienda</span>
+                            </button>
+                            <button onClick={() => setActiveTab('services')} className={`flex flex-col items-center gap-1 transition-all ${activeTab === 'services' ? 'brown-accent scale-110' : 'text-stone-300'}`}>
                                 <Settings className="w-6 h-6" />
                                 <span className="text-[9px] font-bold uppercase tracking-tighter italic">Arsenal</span>
                             </button>
-                            <button onClick={() => setActiveTab('profile')} className={`flex flex-col items-center gap-1 ${activeTab === 'profile' ? 'brown-accent scale-110' : 'text-stone-300'}`}>
+                            <button onClick={() => setActiveTab('profile')} className={`flex flex-col items-center gap-1 transition-all ${activeTab === 'profile' ? 'brown-accent scale-110' : 'text-stone-300'}`}>
                                 <UserIcon className="w-6 h-6" fill={activeTab === 'profile' ? "currentColor" : "none"} />
                                 <span className="text-[9px] font-bold uppercase tracking-tighter italic">Perfil</span>
                             </button>
@@ -318,6 +387,4 @@
         root.render(<App />);
     </script>
 </body>
-
-
 </html>
