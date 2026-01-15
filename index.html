@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I Clean Bottom - Táctico</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -19,14 +19,14 @@
         .brown-accent { color: #000000; }
         .bg-brown-accent { background-color: #794827; }
         .border-brown-accent { border-color: #000000; }
-        
+
         @keyframes liquid-flow {
             0% { border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%; }
             50% { border-radius: 60% 40% 40% 60% / 60% 60% 40% 40%; }
             100% { border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%; }
         }
         .liquid-shape { animation: liquid-flow 6s ease-in-out infinite; }
-        
+
         @keyframes loading {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(300%); }
@@ -40,9 +40,9 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        const LOGO_IMG = "https://lh3.googleusercontent.com/d/1ygEsRR5wfcnLCWvC0-EVG5IpDzg6BkrD"; 
+        const LOGO_IMG = "https://lh3.googleusercontent.com/d/1ygEsRR5wfcnLCWvC0-EVG5IpDzg6BkrD";
         const USER_PHOTO = "https://lh3.googleusercontent.com/d/13mvPeQLVncpaj6QTejGKSAbySFDkGItp";
-        const CAMERA_PHOTO_URL = "https://lh3.googleusercontent.com/d/1inNKNilFfM7KIJQeGFLyLg9FRS28SKP0"; 
+        const CAMERA_PHOTO_URL = "https://lh3.googleusercontent.com/d/1inNKNilFfM7KIJQeGFLyLg9FRS28SKP0";
 
         const LOGROS_LISTA = [
             { id: 'first_mission', title: "Bautismo de Fuego", desc: "Completa tu primera misión", req: (m) => m >= 1, icon: "🔥" },
@@ -144,7 +144,7 @@
             return (
                 <div className="min-h-screen w-full flex items-center justify-center p-4">
                     <div className="relative w-[375px] h-[812px] bg-white rounded-[3.5rem] shadow-2xl overflow-hidden border-[8px] border-brown-accent flex flex-col">
-                        
+
                         <div className="absolute top-0 left-0 w-full h-10 flex justify-center items-end pb-1 z-50 pointer-events-none">
                             <div className="w-24 h-5 bg-brown-accent rounded-full"></div>
                         </div>
@@ -216,7 +216,7 @@
                         </header>
 
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
-                            
+
                             {activeTab === 'home' && (
                                 <div className="space-y-8 animate-in fade-in duration-500">
                                     <div className="relative h-64 flex flex-col items-center justify-center">
@@ -238,14 +238,18 @@
 
                                         {status === 'idle' && (
                                             <button onClick={requestService} className="w-full py-8 bg-brown-accent rounded-[2rem] shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all group">
-                                                <span className="text-white font-bold text-lg italic uppercase tracking-tighter">Desplegar Trono 3000</span>
+                                                <span className="text-white font-bold text-lg italic uppercase tracking-tighter">TENGO GANAS DE DEFECAR O MICCIONAR</span>
                                             </button>
                                         )}
+                                        <div className="space-y-2">
+                                            <h3 className="text-sm font-bold brown-accent uppercase tracking-widest opacity-40">Diseñado por ICleanTeam y ICleanBottom Department</h3>
+
+                                        </div>
 
                                         {status === 'dispatching' && (
                                             <div className="p-8 bg-orange-50 rounded-[2.5rem] border-2 border-dashed border-brown-accent/30 space-y-4">
                                                 <Truck className="w-12 h-12 brown-accent animate-pulse mx-auto" />
-                                                <h3 className="text-lg font-bold brown-accent italic uppercase">En camino...</h3>
+                                                <h3 className="text-lg font-bold brown-accent italic uppercase">Tu ICleanPet 300 esta en camino...</h3>
                                                 <div className="w-full bg-stone-200 h-1.5 rounded-full overflow-hidden">
                                                     <div className="h-full bg-brown-accent animate-loading" style={{width: '30%'}}></div>
                                                 </div>
@@ -259,7 +263,10 @@
                                                     <h3 className="text-xl font-bold text-green-700 italic uppercase">¡Listo!</h3>
                                                 </div>
                                                 <button onClick={finalize} className="w-full py-6 bg-stone-900 rounded-[2rem] shadow-xl flex flex-col items-center justify-center">
-                                                    <span className="text-white font-bold text-lg italic uppercase">Finalizar Cobrar +10 pts</span>
+                                                    <span className="text-white font-bold text-lg italic uppercase">Finalizar Defecadción</span>
+
+                                                    <span className="text-white font-bold text-lg italic uppercase">ACTIVAR AUTOLIMPIEZA +10pts
+                                                    </span>
                                                 </button>
                                                 <button onClick={handleCamera} className="w-full py-4 bg-orange-100 rounded-[1.5rem] flex items-center justify-center gap-2 border-2 border-orange-200 active:scale-95 transition-all">
                                                     <CameraIcon className="w-5 h-5 brown-accent" />
@@ -300,15 +307,15 @@
                                             { id: 'oro', name: "Papel de Oro 24K", desc: "Para una limpieza real" },
                                             { id: 'incognito', name: "Modo Incógnito (Spray)", desc: "Neutralización total" },
                                             { id: 'escudo', name: "Escudo Térmico", desc: "Tapa siempre caliente" },
-                                            { id: 'radar', name: "Detección de Radar", desc: "Alerta temprana silenciosa" },
+                                            { id: 'radar', name: "Detección de Personas", desc: "Alerta temprana silenciosa" },
                                             { id: 'lija', name: "Papel de Lija (Hardcore)", desc: "Para valientes y Hector Batman" },
                                             { id: 'aloe', name: "Papel Aloe Vera (Relax)", desc: "Para cuando lo tienes irritado" },
-                                            { id: 'lavativa', name: "Introduccion Lavativa Automatica", desc: "En casos de estreñimiento" }
+                                            { id: 'lavativa', name: "Introduccion Lavativa Automatica", desc: "En casos de estreñimiento (Tienes que comprarla)" }
                                         ].map((item) => (
-                                            <div key={item.id} onClick={() => toggleArsenal(item.id)} 
+                                            <div key={item.id} onClick={() => toggleArsenal(item.id)}
                                                 className={`p-4 rounded-2xl flex justify-between items-center cursor-pointer border transition-all ${arsenal[item.id] ? 'bg-brown-accent text-white' : 'bg-white'}`}>
                                                 <div>
-                                                    <h4 className="font-bold text-xs uppercase italic">{item.name}</h4>
+                                                    <h4 className="font-bold text-xs uppeRadarrcase italic">{item.name}</h4>
                                                     <p className={`text-[9px] uppercase font-bold ${arsenal[item.id] ? 'text-white/60' : 'text-stone-400'}`}>{item.desc}</p>
                                                 </div>
                                                 <div className={`w-10 h-6 rounded-full p-1 flex items-center ${arsenal[item.id] ? 'bg-orange-400' : 'bg-stone-200'}`}>
@@ -354,7 +361,7 @@
                                         </div>
                                     </div>
 
-                                    <button 
+                                    <button
                                         onClick={() => setShowLogros(true)}
                                         className="w-full py-4 bg-orange-100 border-2 border-orange-200 rounded-3xl flex items-center justify-center gap-3 group active:scale-95 transition-all"
                                     >
